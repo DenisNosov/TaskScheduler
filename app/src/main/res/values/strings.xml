@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TaskScheduler</string>
+    <string name="default_value">Default value.</string>
+</resources>
