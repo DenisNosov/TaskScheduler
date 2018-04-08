@@ -1,11 +1,11 @@
 package denis.dev.taskscheduler.MainActivity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import butterknife.OnItemClick;
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.Common.TaskAdapter;
 import denis.dev.taskscheduler.R;
@@ -25,6 +25,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @BindView(R.id.lvTasks)
     ListView lvTasks;
+
+    @OnItemClick(R.id.lvTasks)
+    void onItemClick(View view, int position) {
+        Log.d(TAG, "onItemClick: item " + position + " clicked");
+        mPresenter.onItemClicked(view, position);
+    }
 
     ArrayList<Task> tasks = new ArrayList<>();
     TaskAdapter taskAdapter;
@@ -46,22 +52,28 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
         IModel mModel = new MainModel(this);
         mPresenter.init(mModel);
-        for (Task task : tasks) {
-            mModel.addNewItem(task);
-        }
-
+//        for (Task task : tasks) {
+//            mModel.addNewItem(task);
+//        }
         taskAdapter = new TaskAdapter(this, R.layout.task_layout, mModel.getItems());
         lvTasks.setAdapter(taskAdapter);
     }
 
     @Override
     public void refreshListView() {
+        taskAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public void setDoneItem(int position) {
+        Log.d(TAG, "setDoneItem: Item set done");
+        taskAdapter.getItem(position).setDone();
+        mPresenter.onItemDone(taskAdapter.getItem(position));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        mPresenter.appClosing();
     }
 }

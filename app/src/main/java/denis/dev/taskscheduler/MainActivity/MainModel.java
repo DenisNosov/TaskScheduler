@@ -35,7 +35,13 @@ public class MainModel implements IModel{
 
     @Override
     public void deleteItem(String name) {
-
+        realm.beginTransaction();
+        RealmResults<Task> tasksToDelete = realm.where(Task.class).equalTo("name", name).findAll();
+        if (!tasksToDelete.isEmpty()) {
+            for (int i = tasksToDelete.size() - 1; i >= 0; i--) {
+                tasksToDelete.get(i).deleteFromRealm();
+            }
+        }
     }
 
     @Override
@@ -44,5 +50,10 @@ public class MainModel implements IModel{
         List<Task> taskList = realm.copyFromRealm(taskRealmResults);
         ArrayList<Task> taskArrayList = new ArrayList<Task>(taskList);
         return taskArrayList;
+    }
+
+    @Override
+    public void closeRealm() {
+        realm.close();
     }
 }
