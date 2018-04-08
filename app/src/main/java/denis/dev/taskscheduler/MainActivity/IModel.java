@@ -1,5 +1,14 @@
 package denis.dev.taskscheduler.MainActivity;
 
-public interface IModel {
+import android.content.Context;
 
+import java.util.ArrayList;
+
+import denis.dev.taskscheduler.Common.Task;
+
+public interface IModel {
+    void initModel();
+    void addNewItem(Task task);
+    void deleteItem(String name);
+    ArrayList<Task> getItems();
 }
