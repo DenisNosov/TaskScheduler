@@ -1,6 +1,7 @@
 package denis.dev.taskscheduler.MainActivity;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ public class MainModel implements IModel{
     MainPresenter mPresenter;
     Context mContext;
     Realm realm;
+    private static final String TAG = "MainModel";
 
     public MainModel(Context context) {
         this.mContext = context;
@@ -42,6 +44,7 @@ public class MainModel implements IModel{
                 tasksToDelete.get(i).deleteFromRealm();
             }
         }
+        realm.commitTransaction();
     }
 
     @Override
@@ -55,5 +58,20 @@ public class MainModel implements IModel{
     @Override
     public void closeRealm() {
         realm.close();
+    }
+
+    @Override
+    public void logRealm() {
+        RealmResults<Task> taskRealmResults = realm.where(Task.class).findAll();
+        List<Task> taskList = realm.copyFromRealm(taskRealmResults);
+        for (Task task : taskList) {
+            Log.d(TAG, "logRealm: task " + task.getName());
+        }
+    }
+
+    @Override
+    public void rofl() {
+        realm.beginTransaction();
+        realm.cancelTransaction();
     }
 }

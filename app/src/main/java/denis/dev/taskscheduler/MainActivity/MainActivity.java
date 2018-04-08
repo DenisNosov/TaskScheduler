@@ -13,6 +13,7 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.Common.TaskAdapter;
@@ -25,6 +26,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @BindView(R.id.lvTasks)
     ListView lvTasks;
+
+    @OnClick(R.id.fabAdd)
+    void logRealmAll() {
+        refreshListView();
+    }
 
     @OnItemClick(R.id.lvTasks)
     void onItemClick(View view, int position) {
@@ -52,16 +58,16 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
         IModel mModel = new MainModel(this);
         mPresenter.init(mModel);
-//        for (Task task : tasks) {
-//            mModel.addNewItem(task);
-//        }
+        for (Task task : tasks) {
+            mModel.addNewItem(task);
+        }
         taskAdapter = new TaskAdapter(this, R.layout.task_layout, mModel.getItems());
         lvTasks.setAdapter(taskAdapter);
     }
 
     @Override
     public void refreshListView() {
-        taskAdapter.notifyDataSetChanged();
+        lvTasks.setAdapter(taskAdapter);
     }
 
     @Override
