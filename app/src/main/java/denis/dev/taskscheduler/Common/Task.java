@@ -8,8 +8,10 @@ public class Task extends RealmObject {
     private Date date;
     private Date time;
     private String description;
+    private boolean isDone;
 
-
+    public Task() {
+    }
 
     public Task(String name, Date date, Date time, String description) {
         this.name = name;
@@ -63,5 +65,13 @@ public class Task extends RealmObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 }

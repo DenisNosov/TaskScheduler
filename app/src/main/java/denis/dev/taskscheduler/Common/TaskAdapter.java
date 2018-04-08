@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import denis.dev.taskscheduler.R;
 
@@ -19,6 +20,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     private Context mContext;
     private int mResource;
+
+    private SimpleDateFormat simpleDateFormat, simpleTimeFormat;
 
     public TaskAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Task> objects) {
         super(context, resource, objects);
@@ -30,9 +33,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        simpleTimeFormat = new SimpleDateFormat("hh:mm a");
         String name = getItem(position).getName();
-        String date = getItem(position).getDate().toString();
-        String time = getItem(position).getTime().toString();
+        String date = simpleDateFormat.format(getItem(position).getDate());
+        String time = simpleTimeFormat.format(getItem(position).getTime());
         String description = getItem(position).getDescription();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
