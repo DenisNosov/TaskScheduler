@@ -29,7 +29,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @OnClick(R.id.fabAdd)
     void logRealmAll() {
-        refreshListView();
+        mPresenter.logRealm();
     }
 
     @OnItemClick(R.id.lvTasks)
@@ -67,7 +67,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void refreshListView() {
-        lvTasks.setAdapter(taskAdapter);
+        Log.d(TAG, "refreshListView: refreshing listView");
+        TaskAdapter newTaskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems());
+        lvTasks.setAdapter(newTaskAdapter);
+        Log.d(TAG, "refreshListView: listView refreshed");
     }
 
     @Override

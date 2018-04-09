@@ -8,6 +8,8 @@ import android.widget.CheckBox;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.ArrayList;
+
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.R;
 
@@ -51,11 +53,15 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void onItemDone(Task item) {
         Log.d(TAG, "onItemDone: Deleting item");
         mModel.deleteItem(item.getName());
-        mModel.rofl();
+        Log.d(TAG, "onItemDone: item deleted");
         getViewState().refreshListView();
     }
 
     public void logRealm() {
         mModel.logRealm();
+    }
+
+    public ArrayList<Task> getItems() {
+        return mModel.getItems();
     }
 }

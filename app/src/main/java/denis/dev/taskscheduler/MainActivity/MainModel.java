@@ -38,6 +38,7 @@ public class MainModel implements IModel{
     @Override
     public void deleteItem(String name) {
         realm.beginTransaction();
+        Log.d(TAG, "deleteItem: transacation began");
         RealmResults<Task> tasksToDelete = realm.where(Task.class).equalTo("name", name).findAll();
         if (!tasksToDelete.isEmpty()) {
             for (int i = tasksToDelete.size() - 1; i >= 0; i--) {
@@ -45,6 +46,7 @@ public class MainModel implements IModel{
             }
         }
         realm.commitTransaction();
+        Log.d(TAG, "deleteItem: transaction commited");
     }
 
     @Override
@@ -67,11 +69,5 @@ public class MainModel implements IModel{
         for (Task task : taskList) {
             Log.d(TAG, "logRealm: task " + task.getName());
         }
-    }
-
-    @Override
-    public void rofl() {
-        realm.beginTransaction();
-        realm.cancelTransaction();
     }
 }

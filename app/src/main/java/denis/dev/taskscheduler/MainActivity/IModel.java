@@ -11,5 +11,4 @@ public interface IModel {
     ArrayList<Task> getItems();
     void closeRealm();
     void logRealm();
-    void rofl();
 }
