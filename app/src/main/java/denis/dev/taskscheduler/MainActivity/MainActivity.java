@@ -1,5 +1,6 @@
 package denis.dev.taskscheduler.MainActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,12 +11,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import denis.dev.taskscheduler.AddingActivity.AddingActivity;
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.Common.TaskAdapter;
 import denis.dev.taskscheduler.R;
@@ -29,8 +30,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     ListView lvTasks;
 
     @OnClick(R.id.fabAdd)
-    void logRealmAll() {
-        mPresenter.logRealm();
+    void addNew() {
+        mPresenter.addNew();
     }
 
     @OnItemClick(R.id.lvTasks)
@@ -72,7 +73,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         taskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems());
         lvTasks.setAdapter(taskAdapter);
         Log.d(TAG, "refreshListView: listView refreshed");
-        taskAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -87,5 +87,19 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.appClosing();
+    }
+
+    public void startActivityAdd() {
+        Intent intent = new Intent(this, AddingActivity.class);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String newName = data.getStringExtra("name");
+        String newDate = data.getStringExtra("date");
+        String newTime = data.getStringExtra("time");
+        String newDescription = data.getStringExtra("description");
+        mPresenter.addNewItem(newName, newDate, newTime, newDescription);
     }
 }

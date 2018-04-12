@@ -1,5 +1,6 @@
 package denis.dev.taskscheduler.MainActivity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -8,9 +9,15 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
+import denis.dev.taskscheduler.AddingActivity.AddingActivity;
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.R;
 
@@ -25,6 +32,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     void init(IModel model) {
         this.mModel = model;
         mModel.initModel();
+        mModel.deleteItem("Ху");
     }
 
     public void appClosing() {
@@ -57,11 +65,29 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().refreshListView();
     }
 
-    public void logRealm() {
-        mModel.logRealm();
-    }
-
     public ArrayList<Task> getItems() {
         return mModel.getItems();
+    }
+
+    public void addNew() {
+        getViewState().startActivityAdd();
+    }
+
+    public void addNewItem(String newName, String newDate, String newTime, String newDescription) {
+        Date newTimeDate = null;
+        Date newDateDate = null;
+        Log.d(TAG, "addNewItem: newDate string " + newDate);
+        Log.d(TAG, "addNewItem: newTime string " + newTime);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+        try {
+            newTimeDate = dateFormat.parse(newTime);
+            newDateDate = timeFormat.parse(newDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Task newTask = new Task(newName, newDateDate, newTimeDate, newDescription);
+        mModel.addNewItem(newTask);
+        getViewState().refreshListView();
     }
 }

@@ -60,13 +60,4 @@ public class MainRepository implements IModel{
     public void closeRealm() {
         realm.close();
     }
-
-    @Override
-    public void logRealm() {
-        RealmResults<Task> taskRealmResults = realm.where(Task.class).findAll();
-        List<Task> taskList = realm.copyFromRealm(taskRealmResults);
-        for (Task task : taskList) {
-            Log.d(TAG, "logRealm: task " + task.getName());
-        }
-    }
 }

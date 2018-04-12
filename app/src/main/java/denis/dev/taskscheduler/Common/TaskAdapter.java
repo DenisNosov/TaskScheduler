@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -62,10 +64,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         Log.d(TAG, "getView: Everything set");
 
-        (convertView.findViewById(R.id.chbDone)).setOnClickListener(new View.OnClickListener() {
+        CheckBox chbDone = (CheckBox)convertView.findViewById(R.id.chbDone);
+        chbDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: onChbClicked item pos " + pos);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "onCheckedChanged: checked pos " + pos);
                 mPresenter.onChbClicked(pos);
             }
         });

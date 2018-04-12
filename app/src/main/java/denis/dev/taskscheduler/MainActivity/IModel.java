@@ -10,5 +10,4 @@ public interface IModel {
     void deleteItem(String name);
     ArrayList<Task> getItems();
     void closeRealm();
-    void logRealm();
 }
