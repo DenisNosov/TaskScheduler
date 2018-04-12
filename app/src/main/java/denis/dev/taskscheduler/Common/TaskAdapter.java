@@ -10,11 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import butterknife.OnClick;
+import denis.dev.taskscheduler.MainActivity.MainPresenter;
 import denis.dev.taskscheduler.R;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
+    MainPresenter mPresenter = new MainPresenter();
 
     private static final String TAG = "SubjectsArrayAdapter";
 
@@ -33,6 +39,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        final int pos = position;
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         simpleTimeFormat = new SimpleDateFormat("hh:mm a");
         String name = getItem(position).getName();
@@ -54,6 +61,14 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         tvDescription.setText(description);
 
         Log.d(TAG, "getView: Everything set");
+
+        (convertView.findViewById(R.id.chbDone)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: onChbClicked item pos " + pos);
+                mPresenter.onChbClicked(pos);
+            }
+        });
 
         return convertView;
     }

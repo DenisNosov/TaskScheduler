@@ -11,13 +11,12 @@ import denis.dev.taskscheduler.Common.Task;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class MainModel implements IModel{
-    MainPresenter mPresenter;
+public class MainRepository implements IModel{
     Context mContext;
     Realm realm;
-    private static final String TAG = "MainModel";
+    private static final String TAG = "MainRepository";
 
-    public MainModel(Context context) {
+    public MainRepository(Context context) {
         this.mContext = context;
     }
 
@@ -38,23 +37,23 @@ public class MainModel implements IModel{
     @Override
     public void deleteItem(String name) {
         realm.beginTransaction();
-        Log.d(TAG, "deleteItem: transacation began");
+        Log.d(TAG, "deleteItem: transaction began, deleting item " + name);
         RealmResults<Task> tasksToDelete = realm.where(Task.class).equalTo("name", name).findAll();
         if (!tasksToDelete.isEmpty()) {
             for (int i = tasksToDelete.size() - 1; i >= 0; i--) {
+                Log.d(TAG, "deleteItem: item found " + tasksToDelete.get(0).getName());
                 tasksToDelete.get(i).deleteFromRealm();
             }
         }
         realm.commitTransaction();
-        Log.d(TAG, "deleteItem: transaction commited");
+        Log.d(TAG, "deleteItem: transaction committed");
     }
 
     @Override
     public ArrayList<Task> getItems() {
         RealmResults<Task> taskRealmResults = realm.where(Task.class).findAll();
         List<Task> taskList = realm.copyFromRealm(taskRealmResults);
-        ArrayList<Task> taskArrayList = new ArrayList<Task>(taskList);
-        return taskArrayList;
+        return new ArrayList<Task>(taskList);
     }
 
     @Override

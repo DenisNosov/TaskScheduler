@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +57,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     public void initView() {
         ButterKnife.bind(this);
-        IModel mModel = new MainModel(this);
+        IModel mModel = new MainRepository(this);
         mPresenter.init(mModel);
         for (Task task : tasks) {
             mModel.addNewItem(task);
@@ -68,15 +69,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void refreshListView() {
         Log.d(TAG, "refreshListView: refreshing listView");
-        TaskAdapter newTaskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems());
-        lvTasks.setAdapter(newTaskAdapter);
+        taskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems());
+        lvTasks.setAdapter(taskAdapter);
         Log.d(TAG, "refreshListView: listView refreshed");
+        taskAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void setDoneItem(int position) {
-        Log.d(TAG, "setDoneItem: Item set done");
         taskAdapter.getItem(position).setDone();
+        Log.d(TAG, "setDoneItem: Item " + taskAdapter.getItem(position).getName() + " setting done");
+        Log.d(TAG, "setDoneItem: Item set done pos: " + position);
         mPresenter.onItemDone(taskAdapter.getItem(position));
     }
 

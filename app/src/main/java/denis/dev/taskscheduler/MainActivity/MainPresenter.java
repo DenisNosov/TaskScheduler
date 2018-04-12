@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -21,9 +22,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public MainPresenter() {
     }
 
-    public MainPresenter(MainView mView) {
-    }
-
     void init(IModel model) {
         this.mModel = model;
         mModel.initModel();
@@ -36,24 +34,26 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void onItemClicked(View view, @NonNull int position) {
         CheckBox chbDone = (CheckBox)view.findViewById(R.id.chbDone);
         if (chbDone.isChecked()) {
-            Log.d(TAG, "onItemClicked: chbChecked pos : " + position);
+            Log.d(TAG, "onItemClicked: CHECKED pos : " + position);
             try {
                 Log.d(TAG, "onItemClicked: position = " + position);
                 getViewState().setDoneItem(position);
-            } catch (NullPointerException e) {
-                Log.d(TAG, "onItemClicked: setdoneitem doesn't work");
-                Log.d(TAG, String.valueOf(e));
-            }
+            } catch (NullPointerException e) {}
             
         } else {
             //Todo third activity after adding
         }
     }
 
+    public void onChbClicked(int position) {
+        Log.d(TAG, "onItemClicked: position = " + position);
+        getViewState().setDoneItem(position);
+    }
+
     public void onItemDone(Task item) {
-        Log.d(TAG, "onItemDone: Deleting item");
+        Log.d(TAG, "onItemDone: Deleting item " + item.getName());
         mModel.deleteItem(item.getName());
-        Log.d(TAG, "onItemDone: item deleted");
+        Log.d(TAG, "onItemDone: item " + item.getName() + " deleted");
         getViewState().refreshListView();
     }
 
