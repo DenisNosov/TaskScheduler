@@ -14,6 +14,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -32,7 +33,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     void init(IModel model) {
         this.mModel = model;
         mModel.initModel();
-        mModel.deleteItem("Ху");
+//        mModel.clear();
     }
 
     public void appClosing() {
@@ -73,21 +74,17 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().startActivityAdd();
     }
 
-    public void addNewItem(String newName, String newDate, String newTime, String newDescription) {
-        Date newTimeDate = null;
-        Date newDateDate = null;
-        Log.d(TAG, "addNewItem: newDate string " + newDate);
-        Log.d(TAG, "addNewItem: newTime string " + newTime);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.US);
-        try {
-            newTimeDate = dateFormat.parse(newTime);
-            newDateDate = timeFormat.parse(newDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public void addNewItem(String newName, int newDay, int newMonth, int newYear, int newHour, int newMinute, String newDescription) {
+        if (mModel.exists(newName)) {
+            getViewState().makeNewToast(newName + " already exists.");
+        } else {
+            Calendar newDate = Calendar.getInstance();
+            Calendar newTime = Calendar.getInstance();
+            newDate.set(newYear, newMonth, newDay);
+            newTime.set(0, 0, 0, newHour, newMinute);
+            Task newTask = new Task(newName, newDate.getTime(), newTime.getTime(), newDescription);
+            mModel.addNewItem(newTask);
+            getViewState().refreshListView();
         }
-        Task newTask = new Task(newName, newDateDate, newTimeDate, newDescription);
-        mModel.addNewItem(newTask);
-        getViewState().refreshListView();
     }
 }

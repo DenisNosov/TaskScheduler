@@ -60,4 +60,24 @@ public class MainRepository implements IModel{
     public void closeRealm() {
         realm.close();
     }
+
+    @Override
+    public void clear() {
+        realm.beginTransaction();
+        RealmResults<Task> toDelete = realm.where(Task.class).findAll();
+        if (!toDelete.isEmpty()) {
+            for (int i = toDelete.size() - 1; i >= 0; i--) {
+                Log.d(TAG, "deleteItem: item found " + toDelete.get(0).getName());
+                toDelete.get(i).deleteFromRealm();
+            }
+        }
+        realm.commitTransaction();
+    }
+
+    @Override
+    public boolean exists(String newName) {
+        RealmResults<Task> exists = realm.where(Task.class).equalTo("name", newName).findAll();
+        if (exists.isEmpty()) return false;
+        else return true;
+    }
 }

@@ -9,4 +9,5 @@ public interface MainView extends MvpView{
     void refreshListView();
     void setDoneItem(int position);
     void startActivityAdd();
+    void makeNewToast(String text);
 }

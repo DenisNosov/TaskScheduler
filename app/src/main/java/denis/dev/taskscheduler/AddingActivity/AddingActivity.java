@@ -55,8 +55,11 @@ public class AddingActivity extends MvpAppCompatActivity implements AddingView {
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         simpleTimeFormat = new SimpleDateFormat("hh:mm a");
         Calendar today = Calendar.getInstance();
-        addingPresenter.setDate(simpleDateFormat.format(today.getTime()));
-        addingPresenter.setTime(simpleTimeFormat.format(today.getTime()));
+        addingPresenter.setNewDay(today.get(Calendar.DAY_OF_MONTH));
+        addingPresenter.setNewMonth(today.get(Calendar.MONTH));
+        addingPresenter.setNewYear(today.get(Calendar.YEAR));
+        addingPresenter.setNewHour(today.get(Calendar.HOUR_OF_DAY));
+        addingPresenter.setNewMinute(today.get(Calendar.MINUTE));
         dpDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -74,11 +77,14 @@ public class AddingActivity extends MvpAppCompatActivity implements AddingView {
     }
 
     @Override
-    public void onFinish(String name, String newDate, String newTime, String description) {
+    public void onFinish(String name, int newDay, int newMonth, int newYear, int newHour, int newMinute, String description) {
         Intent intent = new Intent();
         intent.putExtra("name", name);
-        intent.putExtra("date", newDate);
-        intent.putExtra("time", newTime);
+        intent.putExtra("day", newDay);
+        intent.putExtra("month", newMonth);
+        intent.putExtra("year", newYear);
+        intent.putExtra("hour", newHour);
+        intent.putExtra("minute", newMinute);
         intent.putExtra("description", description);
         setResult(RESULT_OK, intent);
         finish();

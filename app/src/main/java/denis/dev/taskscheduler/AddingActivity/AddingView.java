@@ -5,5 +5,5 @@ import com.arellomobile.mvp.MvpView;
 import denis.dev.taskscheduler.Common.Task;
 
 public interface AddingView extends MvpView {
-    void onFinish(String name, String newDate, String newTime, String description);
+    void onFinish(String name, int newDay, int newMonth, int newYear, int newHour, int newMinute, String description);
 }

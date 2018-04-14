@@ -1,5 +1,7 @@
 package denis.dev.taskscheduler.AddingActivity;
 
+import android.util.Log;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -9,33 +11,47 @@ import java.util.Date;
 
 import denis.dev.taskscheduler.Common.Task;
 
+import static android.content.ContentValues.TAG;
+
 @InjectViewState
 public class AddingPresenter extends MvpPresenter<AddingView> {
+    private static final String TAG = "AddingPresenter";
+    int newDay, newMonth, newYear;
+    int newHour, newMinute;
 
-    String newDate;
-    String newTime;
-
-    public void setTime(String time) {
-        newTime = time;
+    public void setNewMonth(int newMonth) {
+        this.newMonth = newMonth;
     }
 
-    public void setDate(String date) {
-        newDate = date;
+    public void setNewYear(int newYear) {
+        this.newYear = newYear;
+    }
+
+    public void setNewHour(int newHour) {
+        this.newHour = newHour;
+    }
+
+    public void setNewMinute(int newMinute) {
+        this.newMinute = newMinute;
+    }
+
+    public void setNewDay(int day) {
+        newDay = day;
     }
 
 
     public void dateChanged(int year, int month, int day) {
-        String strDate = String.valueOf(day) + "." + String.valueOf(month+1) + "." + String.valueOf(year);
-        setDate(strDate);
+        setNewDay(day);
+        setNewMonth(month);
+        setNewYear(year);
     }
 
     public void timeChanged(int hourOfDay, int minute) {
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
-        String strTime = String.valueOf(hourOfDay) + ":" + String.valueOf(minute);
-        setTime(strTime);
+        setNewHour(hourOfDay);
+        setNewMinute(minute);
     }
 
     public void onAddClicked(String name, String description) {
-        getViewState().onFinish(name, newDate, newTime, description);
+        getViewState().onFinish(name, newDay, newMonth, newYear, newHour, newMinute, description);
     }
 }
