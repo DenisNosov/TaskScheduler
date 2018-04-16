@@ -21,6 +21,11 @@
                 <action android:name="denis.intent.action.ADD_TASK"/>
             </intent-filter>
         </activity>
+        <activity android:name=".TaskActivity.TaskActivity">
+            <intent-filter>
+                <action android:name="denis.intent.action.SHOW_TASK"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -78,4 +78,5 @@ public class Task extends RealmObject {
     public void setDone() {
         isDone = true;
     }
+
 }

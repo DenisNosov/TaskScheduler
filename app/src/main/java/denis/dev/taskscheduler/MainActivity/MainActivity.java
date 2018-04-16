@@ -21,6 +21,7 @@ import denis.dev.taskscheduler.AddingActivity.AddingActivity;
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.Common.TaskAdapter;
 import denis.dev.taskscheduler.R;
+import denis.dev.taskscheduler.TaskActivity.TaskActivity;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView {
     private static final String TAG = "MainActivity";
@@ -41,19 +42,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         mPresenter.onItemClicked(view, position);
     }
 
-    ArrayList<Task> tasks = new ArrayList<>();
     TaskAdapter taskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        tasks.add(new Task("task1", Calendar.getInstance().getTime(),Calendar.getInstance().getTime(),"lmao"));
-        tasks.add(new Task("task2", Calendar.getInstance().getTime(),Calendar.getInstance().getTime(),"rofl"));
-        tasks.add(new Task("task3", Calendar.getInstance().getTime(),Calendar.getInstance().getTime(),"kek"));
-        tasks.add(new Task("task4", Calendar.getInstance().getTime(),Calendar.getInstance().getTime(),"lol"));
-
         initView();
     }
 
@@ -61,9 +55,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
         IModel mModel = new MainRepository(this);
         mPresenter.init(mModel);
-//        for (Task task : tasks) {
-//            mModel.addNewItem(task);
-//        }
         taskAdapter = new TaskAdapter(this, R.layout.task_layout, mModel.getItems());
         lvTasks.setAdapter(taskAdapter);
     }
@@ -98,6 +89,23 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void makeNewToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startActivityTask(Task task) {
+        Calendar date = Calendar.getInstance();
+        Calendar time = Calendar.getInstance();
+        Intent intent = new Intent(this, TaskActivity.class);
+        intent.putExtra("name", task.getName());
+        date.setTime(task.getDate());
+        time.setTime(task.getTime());
+        intent.putExtra("year", date.get(Calendar.YEAR));
+        intent.putExtra("month", date.get(Calendar.MONTH));
+        intent.putExtra("day", date.get(Calendar.DAY_OF_MONTH));
+        intent.putExtra("hour", date.get(Calendar.HOUR_OF_DAY));
+        intent.putExtra("minute", date.get(Calendar.MINUTE));
+        intent.putExtra("description", task.getDescription());
+        startActivity(intent);
     }
 
     @Override

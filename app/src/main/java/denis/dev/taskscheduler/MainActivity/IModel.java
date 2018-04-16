@@ -12,4 +12,5 @@ public interface IModel {
     void closeRealm();
     void clear();
     boolean exists(String newName);
+    Task find(String text);
 }

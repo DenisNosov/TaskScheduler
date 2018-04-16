@@ -1,8 +1,8 @@
 package denis.dev.taskscheduler.MainActivity;
 
-import android.content.Intent;
-
 import com.arellomobile.mvp.MvpView;
+
+import denis.dev.taskscheduler.Common.Task;
 
 public interface MainView extends MvpView{
     void initView();
@@ -10,4 +10,5 @@ public interface MainView extends MvpView{
     void setDoneItem(int position);
     void startActivityAdd();
     void makeNewToast(String text);
+    void startActivityTask(Task task);
 }

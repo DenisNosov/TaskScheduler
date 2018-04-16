@@ -80,4 +80,10 @@ public class MainRepository implements IModel{
         if (exists.isEmpty()) return false;
         else return true;
     }
+
+    @Override
+    public Task find(String text) {
+        RealmResults<Task> findTask = realm.where(Task.class).equalTo("name", text).findAll();
+        return findTask.get(0);
+    }
 }

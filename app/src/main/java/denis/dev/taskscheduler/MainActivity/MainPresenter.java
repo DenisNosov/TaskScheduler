@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
@@ -42,15 +43,16 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public void onItemClicked(View view, @NonNull int position) {
         CheckBox chbDone = (CheckBox)view.findViewById(R.id.chbDone);
+        TextView tvName = (TextView)view.findViewById(R.id.tvName);
         if (chbDone.isChecked()) {
             Log.d(TAG, "onItemClicked: CHECKED pos : " + position);
             try {
                 Log.d(TAG, "onItemClicked: position = " + position);
                 getViewState().setDoneItem(position);
             } catch (NullPointerException e) {}
-            
         } else {
-            //Todo third activity after adding
+            Log.d(TAG, "onItemClicked: " + mModel.find(tvName.getText().toString()).getDate().toString());
+            getViewState().startActivityTask(mModel.find(tvName.getText().toString()));
         }
     }
 
@@ -76,7 +78,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public void addNewItem(String newName, int newDay, int newMonth, int newYear, int newHour, int newMinute, String newDescription) {
         if (mModel.exists(newName)) {
-            getViewState().makeNewToast(newName + " already exists.");
+            getViewState().makeNewToast("Task " + newName + " already exists.");
         } else {
             Calendar newDate = Calendar.getInstance();
             Calendar newTime = Calendar.getInstance();
