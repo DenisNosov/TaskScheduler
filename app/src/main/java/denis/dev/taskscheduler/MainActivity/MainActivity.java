@@ -102,22 +102,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         intent.putExtra("year", date.get(Calendar.YEAR));
         intent.putExtra("month", date.get(Calendar.MONTH));
         intent.putExtra("day", date.get(Calendar.DAY_OF_MONTH));
-        intent.putExtra("hour", date.get(Calendar.HOUR_OF_DAY));
-        intent.putExtra("minute", date.get(Calendar.MINUTE));
+        intent.putExtra("hour", time.get(Calendar.HOUR_OF_DAY));
+        intent.putExtra("minute", time.get(Calendar.MINUTE));
         intent.putExtra("description", task.getDescription());
-        startActivity(intent);
+        startActivityForResult(intent, 2);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String newName = data.getStringExtra("name");
-        int newDay = data.getIntExtra("day", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        int newMonth = data.getIntExtra("month", Calendar.getInstance().get(Calendar.MONTH));
-        int newYear = data.getIntExtra("year", Calendar.getInstance().get(Calendar.YEAR));
-        int newHour = data.getIntExtra("hour", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-        int newMinute = data.getIntExtra("minute", Calendar.getInstance().get(Calendar.MINUTE));
-        String newTime = data.getStringExtra("time");
-        String newDescription = data.getStringExtra("description");
-        mPresenter.addNewItem(newName, newDay, newMonth, newYear, newHour, newMinute, newDescription);
+        mPresenter.ActivityFinished(requestCode, data);
     }
 }

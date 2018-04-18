@@ -6,20 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.arellomobile.mvp.presenter.InjectPresenter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
-import denis.dev.taskscheduler.AddingActivity.AddingActivity;
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.R;
 
@@ -51,8 +44,9 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 getViewState().setDoneItem(position);
             } catch (NullPointerException e) {}
         } else {
-            Log.d(TAG, "onItemClicked: " + mModel.find(tvName.getText().toString()).getDate().toString());
+            Log.d(TAG, "onItemClicked: " + mModel.find(tvName.getText().toString()).getTime().toString());
             getViewState().startActivityTask(mModel.find(tvName.getText().toString()));
+            mModel.deleteItem(tvName.getText().toString());
         }
     }
 
@@ -87,6 +81,32 @@ public class MainPresenter extends MvpPresenter<MainView> {
             Task newTask = new Task(newName, newDate.getTime(), newTime.getTime(), newDescription);
             mModel.addNewItem(newTask);
             getViewState().refreshListView();
+        }
+    }
+
+    public void ActivityFinished(int requestCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                String newName = data.getStringExtra("name");
+                int newDay = data.getIntExtra("day", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                int newMonth = data.getIntExtra("month", Calendar.getInstance().get(Calendar.MONTH));
+                int newYear = data.getIntExtra("year", Calendar.getInstance().get(Calendar.YEAR));
+                int newHour = data.getIntExtra("hour", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                int newMinute = data.getIntExtra("minute", Calendar.getInstance().get(Calendar.MINUTE));
+                String newDescription = data.getStringExtra("description");
+                addNewItem(newName, newDay, newMonth, newYear, newHour, newMinute, newDescription);
+                break;
+            case 2:
+                String newName1 = data.getStringExtra("newName");
+                int newDay1 = data.getIntExtra("newDay", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                int newMonth1 = data.getIntExtra("newMonth", Calendar.getInstance().get(Calendar.MONTH));
+                int newYear1 = data.getIntExtra("newYear", Calendar.getInstance().get(Calendar.YEAR));
+                int newHour1 = data.getIntExtra("newHour", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                int newMinute1 = data.getIntExtra("newMinute", Calendar.getInstance().get(Calendar.MINUTE));
+                int newIsAm1 = data.getIntExtra("newIsAm", Calendar.getInstance().get(Calendar.AM_PM));
+                String newDescription1 = data.getStringExtra("newDescription");
+                addNewItem(newName1, newDay1, newMonth1, newYear1, newHour1, newMinute1, newDescription1);
+                break;
         }
     }
 }

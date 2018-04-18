@@ -2,9 +2,12 @@ package denis.dev.taskscheduler.TaskActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -13,8 +16,18 @@ import java.util.Calendar;
 
 @InjectViewState
 public class TaskPresenter extends MvpPresenter<TaskView> {
-
+    private static final String TAG = "TaskPresenter";
     Calendar currentDate = Calendar.getInstance();
+    Calendar date = Calendar.getInstance();
+    Calendar time = Calendar.getInstance();
+
+    public void setDate(Calendar date) {
+        this.date = date;
+    }
+
+    public void setTime(Calendar time) {
+        this.time = time;
+    }
 
     public void init(String name, Calendar date, String description) {
         getViewState().setDate(date);
@@ -51,7 +64,34 @@ public class TaskPresenter extends MvpPresenter<TaskView> {
             currentDate.set(Calendar.MONTH, monthOfYear);
             currentDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             getViewState().setDate(currentDate);
+            setDate(currentDate);
             currentDate = Calendar.getInstance();
         }
     };
+
+    public void btnChangeTimeClicked(TaskActivity taskActivity) {
+        new TimePickerDialog(taskActivity, t,
+                currentDate.get(Calendar.HOUR_OF_DAY),
+                currentDate.get(Calendar.MINUTE), true)
+                .show();
+    }
+
+    TimePickerDialog.OnTimeSetListener t = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            currentDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            currentDate.set(Calendar.MINUTE, minute);
+            getViewState().setTime(currentDate);
+            setTime(currentDate);
+            Log.d(TAG, "onTimeSet: " + currentDate.get(Calendar.HOUR_OF_DAY));
+            Log.d(TAG, "onTimeSet: " + currentDate.get(Calendar.MINUTE));
+            Log.d(TAG, "onTimeSet: " + currentDate.get(Calendar.AM_PM));
+            currentDate = Calendar.getInstance();
+        }
+    };
+
+    public void btnTaskOkClicked() {
+        Log.d(TAG, "btnTaskOkClicked: " + time.get(Calendar.HOUR_OF_DAY) + ":" + time.get(Calendar.MINUTE));
+        getViewState().onFinish(date, time);
+    }
 }
