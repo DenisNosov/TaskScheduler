@@ -40,13 +40,9 @@ public class MainRepository implements IModel{
         Log.d(TAG, "deleteItem: transaction began, deleting item " + name);
         RealmResults<Task> tasksToDelete = realm.where(Task.class).equalTo("name", name).findAll();
         if (!tasksToDelete.isEmpty()) {
-            for (int i = tasksToDelete.size() - 1; i >= 0; i--) {
-                Log.d(TAG, "deleteItem: item found " + tasksToDelete.get(0).getName());
-                tasksToDelete.get(i).deleteFromRealm();
-            }
+            tasksToDelete.get(0).deleteFromRealm();
         }
         realm.commitTransaction();
-        Log.d(TAG, "deleteItem: transaction committed");
     }
 
     @Override
@@ -83,7 +79,8 @@ public class MainRepository implements IModel{
 
     @Override
     public Task find(String text) {
-        RealmResults<Task> findTask = realm.where(Task.class).equalTo("name", text).findAll();
+        RealmResults<Task> findTask = realm
+                .where(Task.class).equalTo("name", text).findAll();
         return findTask.get(0);
     }
 }

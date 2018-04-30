@@ -2,15 +2,14 @@ package denis.dev.taskscheduler.MainActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -87,8 +86,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void makeNewToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    public void makeNewToast(String text, final String newName, final int newDay, final int newMonth, final int newYear, final int newHour, final int newMinute, final String newDescription) {
+        Snackbar.make(lvTasks, text, Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     @Override
@@ -105,6 +105,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         intent.putExtra("hour", time.get(Calendar.HOUR_OF_DAY));
         intent.putExtra("minute", time.get(Calendar.MINUTE));
         intent.putExtra("description", task.getDescription());
+        Log.d(TAG, "startActivityTask: hour: " + time.get(Calendar.HOUR_OF_DAY));
+        Log.d(TAG, "startActivityTask: minute: " + time.get(Calendar.MINUTE));
         startActivityForResult(intent, 2);
     }
 

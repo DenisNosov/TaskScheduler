@@ -1,6 +1,5 @@
 package denis.dev.taskscheduler.TaskActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -34,9 +33,12 @@ public class TaskActivity extends MvpAppCompatActivity implements TaskView {
     @BindView(R.id.etTaskDescription)
     EditText etTaskDescription;
 
+    String oldName;
+    Intent intent;
+
     @OnClick(R.id.tvTaskName)
-    void tvTaskNameClick() {
-        taskPresenter.tvTaskNameClicked(this);
+    void tvTaskNameClick(View v) {
+        taskPresenter.tvTaskNameClicked(this, v);
     }
 
     @OnClick(R.id.btnChangeDate)
@@ -54,6 +56,11 @@ public class TaskActivity extends MvpAppCompatActivity implements TaskView {
         taskPresenter.btnTaskOkClicked();
     }
 
+    @OnClick(R.id.btnTaskDelete)
+    void btnTaskDeleteClick() {
+        taskPresenter.btnTaskDeleteClicked();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +72,7 @@ public class TaskActivity extends MvpAppCompatActivity implements TaskView {
         ButterKnife.bind(this);
         Calendar date = Calendar.getInstance();
         String name = getIntent().getStringExtra("name");
+        oldName = name;
         String description = getIntent().getStringExtra("description");
         int year = getIntent().getIntExtra("year", date.get(Calendar.YEAR));
         int month = getIntent().getIntExtra("month", date.get(Calendar.MONTH));
@@ -93,17 +101,34 @@ public class TaskActivity extends MvpAppCompatActivity implements TaskView {
     }
 
     @Override
-    public void onFinish(Calendar date, Calendar time) {
-        Intent intent = new Intent();
-        intent.putExtra("newName", tvTaskName.getText().toString());
-        intent.putExtra("newDay", date.get(Calendar.DAY_OF_MONTH));
-        intent.putExtra("newMonth", date.get(Calendar.MONTH));
-        intent.putExtra("newYear", date.get(Calendar.YEAR));
-        intent.putExtra("newHour", time.get(Calendar.HOUR_OF_DAY));
-        intent.putExtra("newMinute", time.get(Calendar.MINUTE));
-        intent.putExtra("newIsAm", time.get(Calendar.AM_PM));
-        intent.putExtra("newDescription", etTaskDescription.getText().toString());
-        setResult(RESULT_OK, intent);
-        finish();
+    public void onFinish(boolean addingNew, boolean deletingOld, Calendar date, Calendar time) {
+        if (addingNew) {
+            intent = new Intent();
+            intent.putExtra("addingNew", addingNew);
+            intent.putExtra("newName", tvTaskName.getText().toString());
+            intent.putExtra("newDay", date.get(Calendar.DAY_OF_MONTH));
+            intent.putExtra("newMonth", date.get(Calendar.MONTH));
+            intent.putExtra("newYear", date.get(Calendar.YEAR));
+            intent.putExtra("newHour", time.get(Calendar.HOUR_OF_DAY));
+            intent.putExtra("newMinute", time.get(Calendar.MINUTE));
+            intent.putExtra("newIsAm", time.get(Calendar.AM_PM));
+            intent.putExtra("newDescription", etTaskDescription.getText().toString());
+            intent.putExtra("deletingOld", deletingOld);
+            intent.putExtra("oldName", oldName);
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            intent = new Intent();
+            intent.putExtra("addingNew", addingNew);
+            intent.putExtra("oldName", oldName);
+            intent.putExtra("deletingOld", deletingOld);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        taskPresenter.onBackPressed();
     }
 }

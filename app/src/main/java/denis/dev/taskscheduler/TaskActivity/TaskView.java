@@ -8,5 +8,5 @@ public interface TaskView extends MvpView {
     void setDate(Calendar date);
     void setTime(Calendar date);
     void setName(String name);
-    void onFinish(Calendar date, Calendar time);
+    void onFinish(boolean b, boolean b1, Calendar date, Calendar time);
 }

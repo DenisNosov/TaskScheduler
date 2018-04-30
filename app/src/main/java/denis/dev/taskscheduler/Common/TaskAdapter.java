@@ -22,7 +22,8 @@ import denis.dev.taskscheduler.MainActivity.MainPresenter;
 import denis.dev.taskscheduler.R;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
-    MainPresenter mPresenter = new MainPresenter();
+   // MainPresenter mPresenter = new MainPresenter();
+    OnCheckBoxListener mListener;
 
     private static final String TAG = "SubjectsArrayAdapter";
 
@@ -38,9 +39,13 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         Log.d(TAG, "SubjectsArrayAdapter: created");
     }
 
+    public interface OnCheckBoxListener {
+        void onChbClicked(int position);
+    }
+
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final int pos = position;
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         simpleTimeFormat = new SimpleDateFormat("hh:mm a");
@@ -68,8 +73,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         chbDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "onCheckedChanged: checked pos " + pos);
-                mPresenter.onChbClicked(pos);
+                mListener.onChbClicked(position);
             }
         });
 

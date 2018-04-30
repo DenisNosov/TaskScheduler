@@ -5,14 +5,18 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.Calendar;
+
+import denis.dev.taskscheduler.R;
 
 @InjectViewState
 public class TaskPresenter extends MvpPresenter<TaskView> {
@@ -35,11 +39,13 @@ public class TaskPresenter extends MvpPresenter<TaskView> {
         getViewState().setName(name);
     }
 
-    public void tvTaskNameClicked(TaskActivity taskActivity) {
+    public void tvTaskNameClicked(TaskActivity taskActivity, View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(taskActivity);
         final EditText edittext = new EditText(taskActivity);
+        TextView tvTaskName = v.findViewById(R.id.tvTaskName);
         alert.setMessage("Enter new name: ");
         alert.setTitle("Renaming");
+        edittext.setText(tvTaskName.getText());
         alert.setView(edittext);
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -92,6 +98,14 @@ public class TaskPresenter extends MvpPresenter<TaskView> {
 
     public void btnTaskOkClicked() {
         Log.d(TAG, "btnTaskOkClicked: " + time.get(Calendar.HOUR_OF_DAY) + ":" + time.get(Calendar.MINUTE));
-        getViewState().onFinish(date, time);
+        getViewState().onFinish(true, true, date, time);
+    }
+
+    public void btnTaskDeleteClicked() {
+        getViewState().onFinish(false, true, null, null);
+    }
+
+    public void onBackPressed() {
+        getViewState().onFinish(false, false, null, null);
     }
 }
