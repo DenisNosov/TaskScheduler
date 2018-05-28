@@ -1,5 +1,6 @@
 package denis.dev.taskscheduler.AddingActivity;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.DatePicker;
@@ -23,11 +24,11 @@ public class AddingActivity extends MvpAppCompatActivity implements AddingView {
     @InjectPresenter
     AddingPresenter addingPresenter;
 
-    @BindView(R.id.dpDate)
-    DatePicker dpDate;
+    @BindView(R.id.tvAddDate)
+    TextView tvAddDate;
 
-    @BindView(R.id.tpTime)
-    TimePicker tpTime;
+    @BindView(R.id.tvAddTime)
+    TextView tvAddTime;
 
     @BindView(R.id.etName)
     EditText etName;
@@ -40,6 +41,16 @@ public class AddingActivity extends MvpAppCompatActivity implements AddingView {
         addingPresenter.onAddClicked(etName.getText().toString(), etDescription.getText().toString());
     }
 
+    @OnClick(R.id.tvAddTime)
+	void onAddTimeClick() {
+    	addingPresenter.onAddTimeClicked(this);
+	}
+
+	@OnClick(R.id.tvAddDate)
+	void onAddDateClick() {
+    	addingPresenter.onAddDateClicked(this);
+	}
+
     SimpleDateFormat simpleDateFormat;
     SimpleDateFormat simpleTimeFormat;
 
@@ -51,30 +62,29 @@ public class AddingActivity extends MvpAppCompatActivity implements AddingView {
     }
 
     private void initView() {
-        ButterKnife.bind(this);
-        simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        simpleTimeFormat = new SimpleDateFormat("hh:mm a");
-        Calendar today = Calendar.getInstance();
-        addingPresenter.setNewDay(today.get(Calendar.DAY_OF_MONTH));
-        addingPresenter.setNewMonth(today.get(Calendar.MONTH));
-        addingPresenter.setNewYear(today.get(Calendar.YEAR));
-        addingPresenter.setNewHour(today.get(Calendar.HOUR_OF_DAY));
-        addingPresenter.setNewMinute(today.get(Calendar.MINUTE));
-        dpDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                addingPresenter.dateChanged(year, monthOfYear, dayOfMonth);
-            }
-        });
-        tpTime.setHour(today.get(Calendar.HOUR_OF_DAY));
-        tpTime.setMinute(today.get(Calendar.MINUTE));
-        tpTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                addingPresenter.timeChanged(hourOfDay, minute);
-            }
-        });
-    }
+		ButterKnife.bind(this);
+		simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		simpleTimeFormat = new SimpleDateFormat("hh:mm a");
+		Calendar today = Calendar.getInstance();
+		addingPresenter.setNewDay(today.get(Calendar.DAY_OF_MONTH));
+		addingPresenter.setNewMonth(today.get(Calendar.MONTH));
+		addingPresenter.setNewYear(today.get(Calendar.YEAR));
+		addingPresenter.setNewHour(today.get(Calendar.HOUR_OF_DAY));
+		addingPresenter.setNewMinute(today.get(Calendar.MINUTE));
+
+		tvAddDate.setText(today.get(Calendar.DAY_OF_MONTH) + "." + today.get(Calendar.MONTH) + "." + today.get(Calendar.YEAR));
+		tvAddTime.setText(today.get(Calendar.HOUR_OF_DAY) + ":" + today.get(Calendar.MINUTE));
+	}
+
+	@Override
+	public void setTvAddDate(String date) {
+    	tvAddDate.setText(date);
+	}
+
+	@Override
+	public void setTvAddTime(String time) {
+    	tvAddTime.setText(time);
+	}
 
     @Override
     public void onFinish(String name, int newDay, int newMonth, int newYear, int newHour, int newMinute, String description) {

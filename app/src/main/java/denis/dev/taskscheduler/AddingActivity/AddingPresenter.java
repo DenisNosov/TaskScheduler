@@ -1,6 +1,10 @@
 package denis.dev.taskscheduler.AddingActivity;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.util.Log;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -39,19 +43,68 @@ public class AddingPresenter extends MvpPresenter<AddingView> {
         newDay = day;
     }
 
+	public int getNewDay() {
+		return newDay;
+	}
 
-    public void dateChanged(int year, int month, int day) {
+	public int getNewMonth() {
+		return newMonth;
+	}
+
+	public int getNewYear() {
+		return newYear;
+	}
+
+	public int getNewHour() {
+		return newHour;
+	}
+
+	public int getNewMinute() {
+		return newMinute;
+	}
+
+	public void dateChanged(int year, int month, int day) {
         setNewDay(day);
         setNewMonth(month);
         setNewYear(year);
+        getViewState().setTvAddDate(day + "." + month + "." + year);
     }
 
     public void timeChanged(int hourOfDay, int minute) {
         setNewHour(hourOfDay);
         setNewMinute(minute);
+        getViewState().setTvAddTime(hourOfDay + ":" + minute);
     }
 
     public void onAddClicked(String name, String description) {
         getViewState().onFinish(name, newDay, newMonth, newYear, newHour, newMinute, description);
     }
+
+
+
+	public void onAddTimeClicked(AddingActivity addingActivity) {
+    	new TimePickerDialog(addingActivity, t,
+				getNewHour(), getNewMinute(), true)
+				.show();
+	}
+
+	TimePickerDialog.OnTimeSetListener t = new TimePickerDialog.OnTimeSetListener() {
+		@Override
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			timeChanged(hourOfDay, minute);
+		}
+	};
+
+	public void onAddDateClicked(AddingActivity addingActivity) {
+		new DatePickerDialog(addingActivity, d,
+				getNewYear(), getNewMonth(), getNewDay())
+				.show();
+	}
+
+	DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
+		@Override
+		public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+			dateChanged(year, month, dayOfMonth);
+		}
+	};
 }

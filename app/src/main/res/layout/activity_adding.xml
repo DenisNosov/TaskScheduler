@@ -24,41 +24,42 @@
     </LinearLayout>
 
     <LinearLayout
+        android:paddingVertical="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginRight="10dp"/>
 
-        <DatePicker
-            android:id="@+id/dpDate"
+        <TextView
+            style="@style/Link"
+            android:id="@+id/tvAddDate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:spinnersShown="true"
-            android:calendarViewShown="false"></DatePicker>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:paddingVertical="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
-            android:paddingVertical="10dp"
-            android:layout_weight="10"
+            android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time"/>
+            android:text="Time" />
 
-        <TimePicker
-            android:id="@+id/tpTime"
+        <TextView
+            style="@style/Link"
+            android:id="@+id/tvAddTime"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></TimePicker>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
