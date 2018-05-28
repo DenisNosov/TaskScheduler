@@ -19,7 +19,7 @@ import java.util.Calendar;
 import denis.dev.taskscheduler.R;
 
 @InjectViewState
-public class TaskPresenter extends MvpPresenter<TaskView> {
+public class TaskPresenter extends MvpPresenter<TaskView>{
     private static final String TAG = "TaskPresenter";
     Calendar currentDate = Calendar.getInstance();
     Calendar date = Calendar.getInstance();

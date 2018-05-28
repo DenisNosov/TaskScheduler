@@ -12,13 +12,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.arellomobile.mvp.presenter.InjectPresenter;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import butterknife.OnClick;
-import denis.dev.taskscheduler.MainActivity.MainPresenter;
 import denis.dev.taskscheduler.R;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
@@ -32,11 +28,12 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     private SimpleDateFormat simpleDateFormat, simpleTimeFormat;
 
-    public TaskAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Task> objects) {
+    public TaskAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Task> objects, OnCheckBoxListener onCheckBoxListener) {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
         Log.d(TAG, "SubjectsArrayAdapter: created");
+        mListener = onCheckBoxListener;
     }
 
     public interface OnCheckBoxListener {
@@ -73,6 +70,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         chbDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "onCheckedChanged: gone to listener");
                 mListener.onChbClicked(position);
             }
         });

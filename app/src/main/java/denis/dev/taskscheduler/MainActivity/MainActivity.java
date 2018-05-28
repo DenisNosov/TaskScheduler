@@ -54,14 +54,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
         IModel mModel = new MainRepository(this);
         mPresenter.init(mModel);
-        taskAdapter = new TaskAdapter(this, R.layout.task_layout, mModel.getItems());
+        taskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems(), mPresenter.onCheckBoxListener);
         lvTasks.setAdapter(taskAdapter);
     }
 
     @Override
     public void refreshListView() {
         Log.d(TAG, "refreshListView: refreshing listView");
-        taskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems());
+        taskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems(), mPresenter.onCheckBoxListener);
         lvTasks.setAdapter(taskAdapter);
         Log.d(TAG, "refreshListView: listView refreshed");
     }

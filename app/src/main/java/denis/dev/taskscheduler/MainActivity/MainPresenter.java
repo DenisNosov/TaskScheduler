@@ -18,12 +18,14 @@ import java.util.Date;
 
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.Common.TaskAdapter;
+import denis.dev.taskscheduler.Common.TaskAdapter.OnCheckBoxListener;
 import denis.dev.taskscheduler.R;
 
 @InjectViewState
-public class MainPresenter extends MvpPresenter<MainView> implements TaskAdapter.OnCheckBoxListener{
+public class MainPresenter extends MvpPresenter<MainView>{
     private static final String TAG = "MainPresenter";
     private IModel mModel;
+	public OnCheckBoxListener onCheckBoxListener;
 
     public MainPresenter() {
     }
@@ -32,7 +34,15 @@ public class MainPresenter extends MvpPresenter<MainView> implements TaskAdapter
         this.mModel = model;
         mModel.initModel();
 //        mModel.clear();
-    }
+
+		onCheckBoxListener = new OnCheckBoxListener() {
+			@Override
+			public void onChbClicked(int position) {
+				Log.d(TAG, "onChbClicked: position = " + position);
+				getViewState().setDoneItem(position);
+			}
+		};
+	}
 
     public void appClosing() {
         mModel.closeRealm();
@@ -120,11 +130,5 @@ public class MainPresenter extends MvpPresenter<MainView> implements TaskAdapter
                     getViewState().refreshListView();
                 }
         }
-    }
-
-    @Override
-    public void onChbClicked(int position) {
-        Log.d(TAG, "onChbClicked: position = " + position);
-        getViewState().setDoneItem(position);
     }
 }
