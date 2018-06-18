@@ -1,5 +1,7 @@
 package denis.dev.taskscheduler.MainActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import denis.dev.taskscheduler.Common.Data;
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.Common.TaskAdapter;
 import denis.dev.taskscheduler.Common.TaskAdapter.OnCheckBoxListener;
@@ -33,7 +36,6 @@ public class MainPresenter extends MvpPresenter<MainView>{
     void init(IModel model) {
         this.mModel = model;
         mModel.initModel();
-//        mModel.clear();
 
 		onCheckBoxListener = new OnCheckBoxListener() {
 			@Override
@@ -87,12 +89,17 @@ public class MainPresenter extends MvpPresenter<MainView>{
     }
 
     public void addFinallyItem(String newName, int newDay, int newMonth, int newYear, int newHour, int newMinute, String newDescription) {
-        Calendar newDate = Calendar.getInstance();
-        Calendar newTime = Calendar.getInstance();
-        newDate.set(newYear, newMonth, newDay);
-        newTime.set(0, 0, 0, newHour, newMinute);
-        Task newTask = new Task(newName, newDate.getTime(), newTime.getTime(), newDescription);
+        Calendar newDateTime = Calendar.getInstance();
+        newDateTime.set(newYear, newMonth, newDay, newHour, newMinute);
+        Task newTask = new Task(newName, newDateTime.getTime(), newDateTime.getTime(), newDescription);
         mModel.addNewItem(newTask);
+
+        //NOTIFICATIONS
+
+		getViewState().createNotification(newTask, newDateTime);
+
+		//NOTIFICATIONS_END
+
         getViewState().refreshListView();
     }
 

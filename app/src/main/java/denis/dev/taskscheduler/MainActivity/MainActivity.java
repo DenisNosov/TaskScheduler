@@ -1,7 +1,11 @@
 package denis.dev.taskscheduler.MainActivity;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +21,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import denis.dev.taskscheduler.AddingActivity.AddingActivity;
+import denis.dev.taskscheduler.Common.Data;
+import denis.dev.taskscheduler.Common.NotificationPublisher;
 import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.Common.TaskAdapter;
 import denis.dev.taskscheduler.R;
@@ -93,6 +99,35 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void startActivityTask(Task task) {
+        Intent intent = createIntent(task);
+        startActivityForResult(intent, 2);
+    }
+
+	@Override
+	public void createNotification(Task newTask, Calendar newDateTime) {
+		Intent contentIntent = createIntent(newTask);
+		PendingIntent pendingContentIntent = PendingIntent.getActivity(this, Data.NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		Notification notification = new Notification.Builder(this)
+				.setSmallIcon(R.drawable.ic_launcher_foreground)
+				.setContentTitle("Reminder")
+				.setContentText(newTask.getName())
+				.setWhen(System.currentTimeMillis())
+				.setAutoCancel(true)
+				.setContentIntent(pendingContentIntent)
+				.build();
+
+		Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+		notificationIntent.putExtra("Notification", notification);
+		notificationIntent.putExtra("Notification id", Data.NOTIFICATION_ID);
+		PendingIntent pendingNotificationIntent = PendingIntent.getBroadcast(this, Data.NOTIFICATION_ID++, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, newDateTime.getTimeInMillis(), pendingNotificationIntent);
+
+	}
+
+	public Intent createIntent(Task task) {
         Calendar date = Calendar.getInstance();
         Calendar time = Calendar.getInstance();
         Intent intent = new Intent(this, TaskActivity.class);
@@ -105,9 +140,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         intent.putExtra("hour", time.get(Calendar.HOUR_OF_DAY));
         intent.putExtra("minute", time.get(Calendar.MINUTE));
         intent.putExtra("description", task.getDescription());
-        Log.d(TAG, "startActivityTask: hour: " + time.get(Calendar.HOUR_OF_DAY));
-        Log.d(TAG, "startActivityTask: minute: " + time.get(Calendar.MINUTE));
-        startActivityForResult(intent, 2);
+        return intent;
     }
 
     @Override

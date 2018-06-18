@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="denis.dev.taskscheduler">
 
+    <uses-permission android:name="android.permission.SET_ALARM" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,6 +28,11 @@
                 <action android:name="denis.intent.action.SHOW_TASK"/>
             </intent-filter>
         </activity>
+        <receiver android:name=".Common.NotificationPublisher">
+            <intent-filter>
+                <action android:name="denis.dev.taskscheduler.NOTIFICATION_CREATE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

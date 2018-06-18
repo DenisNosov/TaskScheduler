@@ -1,9 +1,10 @@
 package denis.dev.taskscheduler.Common;
 
+import java.io.Serializable;
 import java.util.Date;
 import io.realm.RealmObject;
 
-public class Task extends RealmObject {
+public class Task extends RealmObject implements Serializable{
     private String name;
     private Date date;
     private Date time;
