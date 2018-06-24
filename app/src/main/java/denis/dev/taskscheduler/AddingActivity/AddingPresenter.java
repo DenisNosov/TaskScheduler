@@ -107,4 +107,8 @@ public class AddingPresenter extends MvpPresenter<AddingView> {
 			dateChanged(year, month, dayOfMonth);
 		}
 	};
+
+	public void onBackPressed() {
+		getViewState().onFinish(true);
+	}
 }

@@ -86,9 +86,18 @@ public class AddingActivity extends MvpAppCompatActivity implements AddingView {
     	tvAddTime.setText(time);
 	}
 
-    @Override
+	@Override
+	public void onFinish(boolean backPressed) {
+		Intent intent = new Intent();
+		intent.putExtra("addingNew", false);
+		setResult(RESULT_OK, intent);
+		finish();
+	}
+
+	@Override
     public void onFinish(String name, int newDay, int newMonth, int newYear, int newHour, int newMinute, String description) {
         Intent intent = new Intent();
+        intent.putExtra("addingNew", true);
         intent.putExtra("name", name);
         intent.putExtra("day", newDay);
         intent.putExtra("month", newMonth);
@@ -99,4 +108,9 @@ public class AddingActivity extends MvpAppCompatActivity implements AddingView {
         setResult(RESULT_OK, intent);
         finish();
     }
+
+	@Override
+	public void onBackPressed() {
+		addingPresenter.onBackPressed();
+	}
 }

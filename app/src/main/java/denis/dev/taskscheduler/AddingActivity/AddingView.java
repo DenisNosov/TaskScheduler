@@ -8,4 +8,5 @@ public interface AddingView extends MvpView {
     void onFinish(String name, int newDay, int newMonth, int newYear, int newHour, int newMinute, String description);
     void setTvAddDate(String date);
     void setTvAddTime(String time);
+    void onFinish(boolean backPressed);
 }

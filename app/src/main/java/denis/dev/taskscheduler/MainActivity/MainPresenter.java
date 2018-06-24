@@ -106,14 +106,16 @@ public class MainPresenter extends MvpPresenter<MainView>{
     public void ActivityFinished(int requestCode, Intent data) {
         switch (requestCode) {
             case 1:
-                String newName = data.getStringExtra("name");
-                int newDay = data.getIntExtra("day", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-                int newMonth = data.getIntExtra("month", Calendar.getInstance().get(Calendar.MONTH));
-                int newYear = data.getIntExtra("year", Calendar.getInstance().get(Calendar.YEAR));
-                int newHour = data.getIntExtra("hour", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-                int newMinute = data.getIntExtra("minute", Calendar.getInstance().get(Calendar.MINUTE));
-                String newDescription = data.getStringExtra("description");
-                addNewItem(newName, newDay, newMonth, newYear, newHour, newMinute, newDescription);
+                if (data.getBooleanExtra("addingNew", false)) {
+					String newName = data.getStringExtra("name");
+					int newDay = data.getIntExtra("day", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+					int newMonth = data.getIntExtra("month", Calendar.getInstance().get(Calendar.MONTH));
+					int newYear = data.getIntExtra("year", Calendar.getInstance().get(Calendar.YEAR));
+					int newHour = data.getIntExtra("hour", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+					int newMinute = data.getIntExtra("minute", Calendar.getInstance().get(Calendar.MINUTE));
+					String newDescription = data.getStringExtra("description");
+					addNewItem(newName, newDay, newMonth, newYear, newHour, newMinute, newDescription);
+				}
                 break;
             case 2:
                 boolean addingNew = data.getBooleanExtra("addingNew", false);

@@ -49,7 +49,7 @@ public class MainRepository implements IModel{
     public ArrayList<Task> getItems() {
         RealmResults<Task> taskRealmResults = realm.where(Task.class).findAll();
         List<Task> taskList = realm.copyFromRealm(taskRealmResults);
-        return new ArrayList<Task>(taskList);
+        return new ArrayList<>(taskList);
     }
 
     @Override

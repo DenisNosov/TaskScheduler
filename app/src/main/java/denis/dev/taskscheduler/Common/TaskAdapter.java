@@ -25,25 +25,43 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     private Context mContext;
     private int mResource;
+    private ArrayList<Task> mObjects;
 
     private SimpleDateFormat simpleDateFormat, simpleTimeFormat;
 
     public TaskAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Task> objects, OnCheckBoxListener onCheckBoxListener) {
         super(context, resource, objects);
+        mObjects = objects;
         mContext = context;
         mResource = resource;
         Log.d(TAG, "SubjectsArrayAdapter: created");
         mListener = onCheckBoxListener;
     }
 
-    public interface OnCheckBoxListener {
+	public void updateList(ArrayList<Task> items) {
+    	mObjects.clear();
+    	mObjects.addAll(items);
+    	this.notifyDataSetChanged();
+	}
+
+	public interface OnCheckBoxListener {
         void onChbClicked(int position);
     }
 
-    @NonNull
+	@Override
+	public int getCount() {
+		return mObjects.size();
+	}
+
+	@Nullable
+	@Override
+	public Task getItem(int position) {
+		return mObjects.get(position);
+	}
+
+	@NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final int pos = position;
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         simpleTimeFormat = new SimpleDateFormat("hh:mm a");
         String name = getItem(position).getName();

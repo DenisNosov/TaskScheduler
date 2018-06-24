@@ -6,8 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import denis.dev.taskscheduler.R;
-
 public class NotificationPublisher extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {

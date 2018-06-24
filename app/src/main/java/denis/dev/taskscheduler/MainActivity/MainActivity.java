@@ -13,7 +13,9 @@ import android.widget.ListView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -48,6 +50,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     TaskAdapter taskAdapter;
+    AlphaInAnimationAdapter alphaInAnimationAdapter;
+    ArrayList<Task> adapterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +71,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void refreshListView() {
         Log.d(TAG, "refreshListView: refreshing listView");
-        taskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems(), mPresenter.onCheckBoxListener);
-        lvTasks.setAdapter(taskAdapter);
+//        taskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems(), mPresenter.onCheckBoxListener);
+//		lvTasks.setAdapter(taskAdapter);
+		taskAdapter.updateList(mPresenter.getItems());
         Log.d(TAG, "refreshListView: listView refreshed");
     }
 
@@ -112,7 +117,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 				.setSmallIcon(R.drawable.ic_launcher_foreground)
 				.setContentTitle("Reminder")
 				.setContentText(newTask.getName())
-				.setWhen(System.currentTimeMillis())
+				.setWhen(newDateTime.getTimeInMillis())
 				.setAutoCancel(true)
 				.setContentIntent(pendingContentIntent)
 				.build();
