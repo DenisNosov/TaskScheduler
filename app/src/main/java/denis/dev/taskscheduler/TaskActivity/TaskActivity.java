@@ -11,10 +11,12 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import denis.dev.taskscheduler.Common.Task;
 import denis.dev.taskscheduler.R;
 
 public class TaskActivity extends MvpAppCompatActivity implements TaskView {
@@ -41,12 +43,12 @@ public class TaskActivity extends MvpAppCompatActivity implements TaskView {
         taskPresenter.tvTaskNameClicked(this, v);
     }
 
-    @OnClick(R.id.btnChangeDate)
+    @OnClick(R.id.tvTaskDate)
     void btnChangeDateClick() {
         taskPresenter.btnChangeDateClicked(this);
     }
 
-    @OnClick(R.id.btnChangeTime)
+    @OnClick(R.id.tvTaskTime)
     void btnChangeTimeClick() {
         taskPresenter.btnChangeTimeClicked(this);
     }
@@ -65,23 +67,14 @@ public class TaskActivity extends MvpAppCompatActivity implements TaskView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
+
         initView();
     }
 
     private void initView() {
         ButterKnife.bind(this);
-        Calendar date = Calendar.getInstance();
-        String name = getIntent().getStringExtra("name");
-        oldName = name;
-        String description = getIntent().getStringExtra("description");
-        int year = getIntent().getIntExtra("year", date.get(Calendar.YEAR));
-        int month = getIntent().getIntExtra("month", date.get(Calendar.MONTH));
-        int day = getIntent().getIntExtra("day", date.get(Calendar.DAY_OF_MONTH));
-        int hour = getIntent().getIntExtra("hour", date.get(Calendar.HOUR_OF_DAY));
-        int minute = getIntent().getIntExtra("minute", date.get(Calendar.MINUTE));
-        date.set(year, month, day, hour, minute);
-        taskPresenter.init(name, date, description);
-        etTaskDescription.setText(description);
+        oldName = getIntent().getStringExtra("name");
+        taskPresenter.init(getIntent());
     }
 
 
@@ -100,7 +93,12 @@ public class TaskActivity extends MvpAppCompatActivity implements TaskView {
         tvTaskName.setText(name);
     }
 
-    @Override
+	@Override
+	public void setDescription(String description) {
+		etTaskDescription.setText(description);
+	}
+
+	@Override
     public void onFinish(boolean addingNew, boolean deletingOld, Calendar date, Calendar time) {
         if (addingNew) {
             intent = new Intent();

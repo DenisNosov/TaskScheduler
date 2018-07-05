@@ -71,8 +71,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void refreshListView() {
         Log.d(TAG, "refreshListView: refreshing listView");
-//        taskAdapter = new TaskAdapter(this, R.layout.task_layout, mPresenter.getItems(), mPresenter.onCheckBoxListener);
-//		lvTasks.setAdapter(taskAdapter);
 		taskAdapter.updateList(mPresenter.getItems());
         Log.d(TAG, "refreshListView: listView refreshed");
     }
@@ -114,7 +112,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 		PendingIntent pendingContentIntent = PendingIntent.getActivity(this, Data.NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		Notification notification = new Notification.Builder(this)
-				.setSmallIcon(R.drawable.ic_launcher_foreground)
+				.setSmallIcon(R.drawable.ic_launcher_background)
 				.setContentTitle("Reminder")
 				.setContentText(newTask.getName())
 				.setWhen(newDateTime.getTimeInMillis())

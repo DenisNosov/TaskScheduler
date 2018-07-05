@@ -23,52 +23,50 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:paddingVertical="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
+            android:textSize="18sp"
             android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date"/>
+            android:text="Date" />
+
         <TextView
+            style="@style/Link"
             android:id="@+id/tvTaskDate"
-            android:text="date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"/>
-        <Button
-            android:id="@+id/btnChangeDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Change date"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:paddingVertical="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
+            android:textSize="18sp"
             android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time"/>
+            android:text="Time" />
+
         <TextView
+            style="@style/Link"
             android:id="@+id/tvTaskTime"
-            android:text="time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"/>
-        <Button
-            android:id="@+id/btnChangeTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Change time"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
         android:hint="Description"
         app:met_floatingLabel="highlight"
         android:id="@+id/etTaskDescription"

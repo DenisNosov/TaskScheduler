@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -33,11 +34,21 @@ public class TaskPresenter extends MvpPresenter<TaskView>{
         this.time = time;
     }
 
-    public void init(String name, Calendar date, String description) {
-        getViewState().setDate(date);
-        getViewState().setTime(date);
-        getViewState().setName(name);
-    }
+    public void init(Intent intent) {
+		Calendar date = Calendar.getInstance();
+		String name = intent.getStringExtra("name");
+		String description = intent.getStringExtra("description");
+		int year = intent.getIntExtra("year", date.get(Calendar.YEAR));
+		int month = intent.getIntExtra("month", date.get(Calendar.MONTH));
+		int day = intent.getIntExtra("day", date.get(Calendar.DAY_OF_MONTH));
+		int hour = intent.getIntExtra("hour", date.get(Calendar.HOUR_OF_DAY));
+		int minute = intent.getIntExtra("minute", date.get(Calendar.MINUTE));
+		date.set(year, month, day, hour, minute);
+		getViewState().setDate(date);
+		getViewState().setTime(date);
+		getViewState().setName(name);
+		getViewState().setDescription(description);
+	}
 
     public void tvTaskNameClicked(TaskActivity taskActivity, View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(taskActivity);

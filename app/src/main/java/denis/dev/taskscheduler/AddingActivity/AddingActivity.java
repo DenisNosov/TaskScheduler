@@ -3,6 +3,7 @@ package denis.dev.taskscheduler.AddingActivity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -72,8 +73,8 @@ public class AddingActivity extends MvpAppCompatActivity implements AddingView {
 		addingPresenter.setNewHour(today.get(Calendar.HOUR_OF_DAY));
 		addingPresenter.setNewMinute(today.get(Calendar.MINUTE));
 
-		tvAddDate.setText(today.get(Calendar.DAY_OF_MONTH) + "." + today.get(Calendar.MONTH) + "." + today.get(Calendar.YEAR));
-		tvAddTime.setText(today.get(Calendar.HOUR_OF_DAY) + ":" + today.get(Calendar.MINUTE));
+		tvAddDate.setText(DateUtils.formatDateTime(this, today.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
+		tvAddTime.setText(DateUtils.formatDateTime(this, today.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME));
 	}
 
 	@Override
